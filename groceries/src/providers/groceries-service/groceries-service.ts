@@ -19,15 +19,15 @@ export class GroceriesServiceProvider {
 
   dataChanged$: Observable<boolean>;
 
-  private dataChangedSubject: Subject<boolean>;
+  private dataChangeSubject: Subject<boolean>;
 
   baseURL = "http://localhost:8080"
 
   constructor(public http: HttpClient) {
     console.log('Hello GroceriesServiceProvider Provider');
 
-    this.dataChangedSubject = new Subject<boolean>();
-    this.dataChanged$ = this.dataChangedSubject.asObservable();
+    this.dataChangeSubject = new Subject<boolean>();
+    this.dataChanged$ = this.dataChangeSubject.asObservable();
   }
 
   getItems(): Observable<object[]> {
@@ -55,18 +55,28 @@ private handleError(error: Response | any){
 }
 
 
-  removeItem(index){
-    // remove an item from a javascript array
-    this.items.splice(index, 1);
+  removeItem(id){
+    console.log("Removing item id: ", id);
+    this.http.delete(this.baseURL + "/api/groceries/" + id).subscribe(res => {
+      this.items = res;
+      this.dataChangeSubject.next(true);
+    });  
   }
 
   addItem(item){
-    //push this item from the login into our items array
-    this.items.push(item);
+    console.log("Adding grocery item to database...");
+    this.http.post(this.baseURL + "/api/groceries", item).subscribe(res => {
+      this.items = res;
+      this.dataChangeSubject.next(true); 
+    });
   }
 
-  editItem(item, index){
-    this.items[index] = item; 
+  editItem(item, id){
+    console.log("Editing grocery item: ", item);
+    this.http.put(this.baseURL + "/api/groceries/" + id, item).subscribe(res => {
+      this.items = res;
+      this.dataChangeSubject.next(true); 
+    }); 
   }
 
 }

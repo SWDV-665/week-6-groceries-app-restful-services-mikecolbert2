@@ -26,7 +26,7 @@ export class HomePage {
     public inputDialogService: InputDialogServiceProvider,
     public socialSharing: SocialSharing,
     ) {
-      dataService.dataChanged$.subscribe((dataCahnged: boolean) => {
+      dataService.dataChanged$.subscribe((dataChanged: boolean) => {
         this.loadItems();
       });
     }
@@ -41,16 +41,10 @@ export class HomePage {
         error => this.errorMessage = <any>error);
   }
 
-  removeItem(item, index) {
-    console.log("removing item - ", item, index); 
+  removeItem(item, id) {
+    console.log("removing item - ", id); 
 
-    const toast = this.toastCtrl.create({
-      message: "Removing item - " + index + " ...",
-      duration: 3000
-    });   
-    toast.present();
-   
-    this.dataService.removeItem(index);
+    this.dataService.removeItem(id);
        
   }
 
@@ -75,17 +69,17 @@ export class HomePage {
        
   }
 
-  editItem(item, index) {
-    console.log("editing item - ", item, index); 
+  editItem(item, id) {
+    console.log("editing item - ", item, id); 
 
     const toast = this.toastCtrl.create({
-      message: "Editing item - " + index + " ...",
+      message: "Editing item - " + id + " ...",
       duration: 3000
     });   
     toast.present();
     
     // pass the item and index to our edit prompt
-    this.inputDialogService.showPrompt(item, index)
+    this.inputDialogService.showPrompt(item, item._id)
   }
 
 
