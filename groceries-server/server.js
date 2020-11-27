@@ -93,7 +93,7 @@ app.put('/api/groceries/:id', function (req, res) {
         name: req.body.name,
         quantity: req.body.quantity
     };
-    console.log("Updating item - ", req.params.id);
+    console.log("Updating grocery item... ", req.params.id);
     Grocery.update({_id: req.params.id}, grocery, function (err, raw) {
         if (err) {
             res.send(err);
@@ -105,6 +105,7 @@ app.put('/api/groceries/:id', function (req, res) {
 
 // Delete a grocery Item
 app.delete('/api/groceries/:id', function (req, res) {
+    console.log("Deleting grocery item... ", req.params.id);
     Grocery.remove({
         _id: req.params.id
     }, function (err, grocery) {
