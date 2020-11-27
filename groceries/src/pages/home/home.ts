@@ -15,6 +15,9 @@ export class HomePage {
 
   title = "Grocery List"
 
+  items = [];
+  errorMessage: string;
+
   constructor(
     public navCtrl: NavController, 
     public toastCtrl: ToastController,
@@ -23,11 +26,19 @@ export class HomePage {
     public inputDialogService: InputDialogServiceProvider,
     public socialSharing: SocialSharing,
     ) {
-
+      dataService.dataChanged$.subscribe((dataCahnged: boolean) => {
+        this.loadItems();
+      });
     }
 
+  ionViewDidLoad() {
+    this.loadItems();
+  }
+
   loadItems(){
-    return this.dataService.getItems();
+    this.dataService.getItems().subscribe(
+        items => this.items = items,
+        error => this.errorMessage = <any>error);
   }
 
   removeItem(item, index) {
